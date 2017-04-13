@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Data-driven extrusion - 4.3</title>
+  <link rel="stylesheet" href="http://localhost:800/arcgis_js_api/library/4.3/4.3/dijit/themes/claro/claro.css" />
+  <link rel="stylesheet" href="http://localhost:800/arcgis_js_api/library/4.3/4.3/esri/css/main.css" />
+  <script src="http://localhost:800/arcgis_js_api/library/4.3/4.3/init.js"></script>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <script>
+    require([
+      "esri/Map",
+      "esri/views/SceneView",
+      "esri/layers/FeatureLayer",
+      "esri/renderers/SimpleRenderer",
+      "esri/symbols/PolygonSymbol3D",
+      "esri/symbols/ExtrudeSymbol3DLayer",
+      "esri/widgets/Legend",
+      "esri/layers/MapImageLayer",
+      "esri/layers/support/LabelClass",
+      "esri/symbols/TextSymbol",
+      "esri/symbols/LabelSymbol3D",
+      "esri/symbols/TextSymbol3DLayer",
+      "dojo/domReady!"
+    ], function(
+      Map, SceneView, FeatureLayer, SimpleRenderer, PolygonSymbol3D,
+      ExtrudeSymbol3DLayer, Legend,MapImageLayer,LabelClass,TextSymbol,LabelSymbol3D,
+      TextSymbol3DLayer
+    ) {
+
+      // limit visualization to floor -1 to 5
+      var defExp0 = ["floor = -1"];
+      var defExp1 = ["floor = 1"];
+      var defExp2 = ["floor = 2"];
+      var defExp3 = ["floor = 3"];
+      var defExp4 = ["floor = 4"];
+      var defExp5 = ["floor = 5"];
+      var defExp6 = ["floor = 6"];
+
+      /*****************************************************************
+       * In this case we set two visual variables on the renderer. Since
+       * we're defining both size and color based on data values, there's
+       * no need to specify defaults in the `symbol` property of the
+       * renderer. In 3D it is easier to visually perceive size differences
+       * when they are combined with color. Therefore we set up both a
+       * size and a color visual variable based on the values of the same
+       * field.
+       *
+       * Notice that the data value ramps for each is slightly different.
+       * Color allows us to see the spatial trend in a tight range, whereas
+       * size can be used to observe nuances between features of the same
+       * color.
+       *****************************************************************/
+
+      var renderer = new SimpleRenderer({
+        symbol: new PolygonSymbol3D({
+          symbolLayers: [new ExtrudeSymbol3DLayer()]
+        }),
+          visualVariables: [
+              {
+                type: "color",
+                field: "myid",
+                stops: [
+                    { value: 2, color: "yellow" },
+                    { value: 291, color: "blue" }
+                ]
+              }
+          ]
+      });
+
+      //商铺标注
+      var shopLabelClass = new LabelClass({
+          labelExpressionInfo: { value: "{name}" },
+          symbol: new TextSymbol({
+              color: "red",
+              haloSize: 2,
+              haloColor: "white"
+          }),
+          labelPlacement:"above-right"
+      });
+
+      //3d标注
+      var shop3dLabelClass = new LabelClass({
+          labelExpressionInfo: {
+              value: "{name}"
+          },
+          symbol: new LabelSymbol3D({
+              symbolLayers: [new TextSymbol3DLayer({
+                  material: { color: [49,163,84] },
+                  size: 12
+              })]
+          }),
+          labelPlacement:"above-right"
+      });
+
+      var Lyr0 = new FeatureLayer({
+        url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
+        renderer: renderer,
+        title: "oumeihui all floor",
+        outFields: ["*"],
+        definitionExpression: defExp0,
+        elevationInfo: {
+            mode: "relative-to-ground",
+            offset: 0
+        }
+      });
+      Lyr0.labelsVisible = true;
+      Lyr0.labelingInfo = [ shopLabelClass ];
+
+      var Lyr1 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
+          renderer: renderer,
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp1,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 10
+          }
+      });
+      Lyr1.labelsVisible = true;
+      Lyr1.labelingInfo = [ shop3dLabelClass ];
+
+      var Lyr2 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
+          renderer: renderer,
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp2,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 20
+          }
+      });
+      Lyr2.labelsVisible = true;
+      Lyr2.labelingInfo = [ shopLabelClass ];
+
+      var Lyr3 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
+          renderer: renderer,
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp3,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 30
+          }
+      });
+      Lyr3.labelsVisible = true;
+      Lyr3.labelingInfo = [ shopLabelClass ];
+
+      var Lyr4 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
+          renderer: renderer,
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp4,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 40
+          }
+      });
+      Lyr4.labelsVisible = true;
+      Lyr4.labelingInfo = [ shopLabelClass ];
+
+      var Lyr5 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
+          renderer: renderer,
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp5,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 50
+          }
+      });
+      Lyr5.labelsVisible = true;
+      Lyr5.labelingInfo = [ shopLabelClass ];
+
+      var Lyr6 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
+          renderer: renderer,
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp6,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 60
+          }
+      });
+      Lyr6.labelsVisible = true;
+      Lyr6.labelingInfo = [ shopLabelClass ];
+
+      var map = new Map({
+        layers: [Lyr0,Lyr1,Lyr2,Lyr3,Lyr4,Lyr5,Lyr6]
+      });
+
+      var myServiceURL = "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetColor/MapServer";
+      var myLayer = new MapImageLayer(myServiceURL);
+      map.add(myLayer);
+
+
+      var view = new SceneView({
+        container: "viewDiv",
+        map: map,
+        camera: {
+          position: {
+            latitude: 39.985,
+            longitude: 116.361
+          },
+          tilt: 45,
+          heading: 10
+        }
+      });
+
+      var legend = new Legend({
+        view: view
+      });
+
+      view.ui.add(legend, "bottom-right");
+
+    });
+  </script>
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

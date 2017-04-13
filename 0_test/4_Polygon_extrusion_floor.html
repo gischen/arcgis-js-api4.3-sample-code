@@ -33,11 +33,12 @@
       "esri/symbols/TextSymbol",
       "esri/symbols/LabelSymbol3D",
       "esri/symbols/TextSymbol3DLayer",
+      "esri/renderers/UniqueValueRenderer",
       "dojo/domReady!"
     ], function(
       Map, SceneView, FeatureLayer, SimpleRenderer, PolygonSymbol3D,
       ExtrudeSymbol3DLayer, Legend,MapImageLayer,LabelClass,TextSymbol,LabelSymbol3D,
-      TextSymbol3DLayer
+      TextSymbol3DLayer,UniqueValueRenderer
     ) {
 
       // limit visualization to floor -1 to 5
@@ -49,36 +50,771 @@
       var defExp5 = ["floor = 5"];
       var defExp6 = ["floor = 6"];
 
-      /*****************************************************************
-       * In this case we set two visual variables on the renderer. Since
-       * we're defining both size and color based on data values, there's
-       * no need to specify defaults in the `symbol` property of the
-       * renderer. In 3D it is easier to visually perceive size differences
-       * when they are combined with color. Therefore we set up both a
-       * size and a color visual variable based on the values of the same
-       * field.
-       *
-       * Notice that the data value ramps for each is slightly different.
-       * Color allows us to see the spatial trend in a tight range, whereas
-       * size can be used to observe nuances between features of the same
-       * color.
-       *****************************************************************/
+      //orange
+      var orangeSym = new PolygonSymbol3D({
+          symbolLayers: [
+              new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#FC921F"  // orange
+                  }
+              })
+          ]
+      });
 
+      //purple
+      var purpleSym = new PolygonSymbol3D({
+          symbolLayers: [
+              new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#9E559C"  // purple
+                  }
+              })
+          ]
+      });
+
+      // green
+      var greenSym = new PolygonSymbol3D({
+          symbolLayers: [
+              new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#00EE9C"  // green
+                  }
+              })
+          ]
+      });
+
+      // white
+      var whiteSym = new PolygonSymbol3D({
+          symbolLayers: [
+              new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#eeeeee"  // white
+                  }
+              })
+          ]
+      });
+
+      //分级渲染
       var renderer = new SimpleRenderer({
-        symbol: new PolygonSymbol3D({
-          symbolLayers: [new ExtrudeSymbol3DLayer()]
-        }),
+          symbol: new PolygonSymbol3D({
+              symbolLayers: [new ExtrudeSymbol3DLayer()]
+          }),
           visualVariables: [
               {
-                type: "color",
-                field: "myid",
-                stops: [
-                    { value: 2, color: "yellow" },
-                    { value: 291, color: "blue" }
-                ]
+                  type: "color",
+                  field: "myid",
+                  stops: [
+                      { value: 2, color: "yellow" },
+                      { value: 291, color: "blue" }
+                  ]
               }
           ]
       });
+
+      var renderer2 = new SimpleRenderer({
+          symbol:orangeSym
+      });
+
+      //地下一层唯一值渲染
+      var renderer0 = new UniqueValueRenderer({
+          defaultSymbol: new PolygonSymbol3D({
+              symbolLayers: [new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#A7C636"
+                  }
+              })]
+          }),
+          defaultLabel: "Other",
+          field: "myid",
+          uniqueValueInfos: [
+              {
+                  value: "2",
+                  symbol: orangeSym,
+                  label: "树心旁"
+              },
+              {
+                  value: "4",
+                  symbol: greenSym,
+                  label: "多乐之日"
+              },
+              {
+                  value: "6",
+                  symbol: purpleSym,
+                  label: "Candie's"
+              },
+              {
+                  value: "8",
+                  symbol: orangeSym,
+                  label: "La Chapelle SPORT"
+              },
+              {
+                  value: "10",
+                  symbol: greenSym,
+                  label: "La Chapelle"
+              },
+              {
+                  value: "12",
+                  symbol: purpleSym,
+                  label: "万宁"
+              },
+              {
+                  value: "14",
+                  symbol: greenSym,
+                  label: "Saizeriya"
+              },
+              {
+                  value: "16",
+                  symbol: orangeSym,
+                  label: "POP MART"
+              },
+              {
+                  value: "21",
+                  symbol: purpleSym,
+                  label: "Aimer"
+              },
+              {
+                  value: "22",
+                  symbol: greenSym,
+                  label: "可多"
+              },
+              {
+                  value: "24",
+                  symbol: purpleSym,
+                  label: "i mi's"
+              },
+              {
+                  value: "27",
+                  symbol: orangeSym,
+                  label: "i-Zpne"
+              },
+              {
+                  value: "29",
+                  symbol: greenSym,
+                  label: "欧美药妆"
+              },
+              {
+                  value: "30",
+                  symbol: orangeSym,
+                  label: "Vero Moda"
+              },
+              {
+                  value: "32",
+                  symbol: greenSym,
+                  label: "JACK JONES"
+              },
+              {
+                  value: "34",
+                  symbol: purpleSym,
+                  label: "ONLY"
+              },
+              {
+                  value: "36",
+                  symbol: greenSym,
+                  label: "筵色点心专门店"
+              },
+              {
+                  value: "39",
+                  symbol: purpleSym,
+                  label: "快煮慢食香港茶餐厅"
+              },
+              {
+                  value: "41",
+                  symbol: greenSym,
+                  label: "麻里麻里香锅"
+              },
+              {
+                  value: "43",
+                  symbol: purpleSym,
+                  label: "茶大爷"
+              },
+              {
+                  value: "45",
+                  symbol: greenSym,
+                  label: "不二出品"
+              },
+              {
+                  value: "50",
+                  symbol: purpleSym,
+                  label: "6ILTY 8IGHT"
+              },
+              {
+                  value: "291",
+                  symbol: whiteSym
+              }
+              ]
+      });
+
+      //一层唯一值渲染
+      var renderer1 = new UniqueValueRenderer({
+          defaultSymbol: new PolygonSymbol3D({
+              symbolLayers: [new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#A7C636"
+                  }
+              })]
+          }),
+          defaultLabel: "Other",
+          field: "myid",
+          uniqueValueInfos: [
+              {
+                  value: "65",
+                  symbol: orangeSym,
+                  label: "VANS"
+              },
+              {
+                  value: "67",
+                  symbol: greenSym,
+                  label: "PROSPEOS"
+              },
+              {
+                  value: "69",
+                  symbol: purpleSym,
+                  label: "adidas"
+              },
+              {
+                  value: "70",
+                  symbol: orangeSym,
+                  label: "DAZZLE"
+              },
+              {
+                  value: "72",
+                  symbol: greenSym,
+                  label: "NIKE"
+              },
+              {
+                  value: "74",
+                  symbol: purpleSym,
+                  label: "NEW LOOK LONDON"
+              },
+              {
+                  value: "76",
+                  symbol: greenSym,
+                  label: "CASIO"
+              },
+              {
+                  value: "78",
+                  symbol: orangeSym,
+                  label: "Etam BOUTIQUE"
+              },
+              {
+                  value: "80",
+                  symbol: purpleSym,
+                  label: "innisfree"
+              },
+              {
+                  value: "82",
+                  symbol: greenSym,
+                  label: "Onistuka Tiger"
+              },
+              {
+                  value: "84",
+                  symbol: purpleSym,
+                  label: "THE SHOES BAR"
+              },
+              {
+                  value: "86",
+                  symbol: orangeSym,
+                  label: "FILA"
+              },
+              {
+                  value: "88",
+                  symbol: greenSym,
+                  label: "SEPHORA"
+              },
+              {
+                  value: "90",
+                  symbol: orangeSym,
+                  label: "SELECTED"
+              },
+              {
+                  value: "92",
+                  symbol: greenSym,
+                  label: "H&M"
+              },
+              {
+                  value: "94",
+                  symbol: purpleSym,
+                  label: "CK"
+              },
+              {
+                  value: "96",
+                  symbol: greenSym,
+                  label: "LEVI'S"
+              },
+              {
+                  value: "98",
+                  symbol: purpleSym,
+                  label: "promod"
+              },
+              {
+                  value: "100",
+                  symbol: greenSym,
+                  label: "GODIVA"
+              },
+              {
+                  value: "101",
+                  symbol: purpleSym,
+                  label: "eGG"
+              },
+              {
+                  value: "104",
+                  symbol: greenSym,
+                  label: "ETUDE"
+              },
+              {
+                  value: "106",
+                  symbol: purpleSym,
+                  label: "COSTA COFFEE"
+              },
+              {
+                  value: "110",
+                  symbol: greenSym,
+                  label:"banila co."
+              },
+              {
+                  value: "111",
+                  symbol: greenSym,
+                  label:"U/2/B"
+              },
+              {
+                  value: "112",
+                  symbol: greenSym,
+                  label:"嘟菲"
+              },
+              {
+                  value: "113",
+                  symbol: greenSym,
+                  label:"LOVE&LOVE COUPLE'S"
+              },
+              {
+                  value: "116",
+                  symbol: greenSym,
+                  label:"MiXX"
+              },
+              {
+                  value: "286",
+                  symbol: whiteSym,
+                  label:"公共区域"
+              }
+          ]
+      });
+
+      //二层渲染
+      var renderer2 = new UniqueValueRenderer({
+          defaultSymbol: new PolygonSymbol3D({
+              symbolLayers: [new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#A7C636"
+                  }
+              })]
+          }),
+          defaultLabel: "Other",
+          field: "myid",
+          uniqueValueInfos: [
+              {
+                  value: "130",
+                  symbol: orangeSym,
+                  label: "My Style"
+              },
+              {
+                  value: "131",
+                  symbol: greenSym,
+                  label: "IDOLE"
+              },
+              {
+                  value: "133",
+                  symbol: purpleSym,
+                  label: "broadcast"
+              },
+              {
+                  value: "135",
+                  symbol: orangeSym,
+                  label: "Lily"
+              },
+              {
+                  value: "137",
+                  symbol: greenSym,
+                  label: "JNBYSINCE1994"
+              },
+              {
+                  value: "140",
+                  symbol: purpleSym,
+                  label: "ME & CITY"
+              },
+              {
+                  value: "141",
+                  symbol: greenSym,
+                  label: "GILLIVO"
+              },
+              {
+                  value: "142",
+                  symbol: orangeSym,
+                  label: "GELANO"
+              },
+              {
+                  value: "143",
+                  symbol: purpleSym,
+                  label: "LA ROSABELLE"
+              },
+              {
+                  value: "146",
+                  symbol: greenSym,
+                  label: "UNIQLO"
+              },
+              {
+                  value: "148",
+                  symbol: purpleSym,
+                  label: "Salad"
+              },
+              {
+                  value: "150",
+                  symbol: orangeSym,
+                  label: "汇美舍"
+              },
+              {
+                  value: "153",
+                  symbol: greenSym,
+                  label: "C&A"
+              },
+              {
+                  value: "155",
+                  symbol: orangeSym,
+                  label: "H&M"
+              },
+              {
+                  value: "161",
+                  symbol: greenSym,
+                  label: "启运"
+              },
+              {
+                  value: "166",
+                  symbol: purpleSym,
+                  label: "Linsc"
+              },
+              {
+                  value: "287",
+                  symbol: whiteSym,
+                  label:"公共区域"
+              }
+          ]
+      });
+
+      //三层渲染
+      var renderer3 = new UniqueValueRenderer({
+          defaultSymbol: new PolygonSymbol3D({
+              symbolLayers: [new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#A7C636"
+                  }
+              })]
+          }),
+          defaultLabel: "Other",
+          field: "myid",
+          uniqueValueInfos: [
+              {
+                  value: "171",
+                  symbol: orangeSym,
+                  label: "HOLA"
+              },
+              {
+                  value: "172",
+                  symbol: greenSym,
+                  label: "雕刻时光"
+              },
+              {
+                  value: "174",
+                  symbol: purpleSym,
+                  label: "easy style"
+              },
+              {
+                  value: "175",
+                  symbol: orangeSym,
+                  label: "CONVERSE"
+              },
+              {
+                  value: "176",
+                  symbol: greenSym,
+                  label: "BOY"
+              },
+              {
+                  value: "177",
+                  symbol: purpleSym,
+                  label: "GXG"
+              },
+              {
+                  value: "178",
+                  symbol: greenSym,
+                  label: "THE SHOES BAR"
+              },
+              {
+                  value: "179",
+                  symbol: orangeSym,
+                  label: "金宝贝"
+              },
+              {
+                  value: "180",
+                  symbol: purpleSym,
+                  label: "阿吉豆"
+              },
+              {
+                  value: "181",
+                  symbol: greenSym,
+                  label: "夏·花"
+              },
+              {
+                  value: "182",
+                  symbol: purpleSym,
+                  label: "和木生活"
+              },
+              {
+                  value: "183",
+                  symbol: orangeSym,
+                  label: "Hush Puppies"
+              },
+              {
+                  value: "186",
+                  symbol: greenSym,
+                  label: "喜晴"
+              },
+              {
+                  value: "187",
+                  symbol: orangeSym,
+                  label: "酷乐潮玩"
+              },
+              {
+                  value: "188",
+                  symbol: greenSym,
+                  label: "C&A"
+              },
+              {
+                  value: "189",
+                  symbol: purpleSym,
+                  label: "启步"
+              },
+              {
+                  value: "190",
+                  symbol: greenSym,
+                  label: "爱亚"
+              },
+              {
+                  value: "191",
+                  symbol: purpleSym,
+                  label: "miomi"
+              },
+              {
+                  value: "192",
+                  symbol: greenSym,
+                  label: "十八字金"
+              },
+              {
+                  value: "193",
+                  symbol: purpleSym,
+                  label: "Restill show"
+              },
+              {
+                  value: "204",
+                  symbol: greenSym,
+                  label: "SKINNYSKIN"
+              },
+              {
+                  value: "216",
+                  symbol: purpleSym,
+                  label: "HOTWIND"
+              },
+              {
+                  value: "288",
+                  symbol: whiteSym,
+                  label:"公共区域"
+              }
+          ]
+      });
+
+      //四层渲染
+      var renderer4 = new UniqueValueRenderer({
+          defaultSymbol: new PolygonSymbol3D({
+              symbolLayers: [new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#A7C636"
+                  }
+              })]
+          }),
+          defaultLabel: "Other",
+          field: "myid",
+          uniqueValueInfos: [
+              {
+                  value: "220",
+                  symbol: orangeSym,
+                  label: "大渔"
+              },
+              {
+                  value: "228",
+                  symbol: greenSym,
+                  label: "玛莲朵SPA"
+              },
+              {
+                  value: "229",
+                  symbol: purpleSym,
+                  label: "芙蓉工坊"
+              },
+              {
+                  value: "230",
+                  symbol: orangeSym,
+                  label: "必瘦站"
+              },
+              {
+                  value: "231",
+                  symbol: greenSym,
+                  label: "FRANCK PROVOST"
+              },
+              {
+                  value: "232",
+                  symbol: purpleSym,
+                  label: "爱空间美甲"
+              },
+              {
+                  value: "233",
+                  symbol: greenSym,
+                  label: "西贝筱面村"
+              },
+              {
+                  value: "234",
+                  symbol: orangeSym,
+                  label: "啄木鸟教育"
+              },
+              {
+                  value: "236",
+                  symbol: purpleSym,
+                  label: "多喜 Dolce"
+              },
+              {
+                  value: "237",
+                  symbol: greenSym,
+                  label: "啄木鸟教育"
+              },
+              {
+                  value: "238",
+                  symbol: purpleSym,
+                  label: "金宝贝"
+              },
+              {
+                  value: "247",
+                  symbol: orangeSym,
+                  label: "唐美发艺"
+              },
+              {
+                  value: "254",
+                  symbol: greenSym,
+                  label: "凯撒旅游"
+              },
+              {
+                  value: "261",
+                  symbol: orangeSym,
+                  label: "华尔街英语"
+              },
+              {
+                  value: "270",
+                  symbol: greenSym,
+                  label: "星空琴行"
+              },
+              {
+                  value: "273",
+                  symbol: purpleSym,
+                  label: "娃娃攻略"
+              },
+              {
+                  value: "289",
+                  symbol: whiteSym,
+                  label:"公共区域"
+              }
+          ]
+      });
+
+      //五层渲染
+      var renderer5 = new UniqueValueRenderer({
+          defaultSymbol: new PolygonSymbol3D({
+              symbolLayers: [new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#A7C636"
+                  }
+              })]
+          }),
+          defaultLabel: "Other",
+          field: "myid",
+          uniqueValueInfos: [
+              {
+                  value: "263",
+                  symbol: orangeSym,
+                  label: "心泰心厨"
+              },
+              {
+                  value: "265",
+                  symbol: greenSym,
+                  label: "新辣道"
+              },
+              {
+                  value: "266",
+                  symbol: purpleSym,
+                  label: "将太无二"
+              },
+              {
+                  value: "267",
+                  symbol: orangeSym,
+                  label: "度小月"
+              },
+              {
+                  value: "269",
+                  symbol: greenSym,
+                  label: "云海肴"
+              },
+              {
+                  value: "275",
+                  symbol: purpleSym,
+                  label: "边境东南亚小吃"
+              },
+              {
+                  value: "276",
+                  symbol: greenSym,
+                  label: "犟小面"
+              },
+              {
+                  value: "281",
+                  symbol: orangeSym,
+                  label: "金奶奶石锅鸡"
+              },
+              {
+                  value: "283",
+                  symbol: purpleSym,
+                  label: "赵香兰南洋火锅铺"
+              },
+              {
+                  value: "290",
+                  symbol: whiteSym,
+                  label:"公共区域"
+              }
+          ]
+      });
+
+      //六层渲染
+      var renderer6 = new UniqueValueRenderer({
+          defaultSymbol: new PolygonSymbol3D({
+              symbolLayers: [new ExtrudeSymbol3DLayer({
+                  material: {
+                      color: "#A7C636"
+                  }
+              })]
+          }),
+          defaultLabel: "Other",
+          field: "myid",
+          uniqueValueInfos: [
+              {
+                  value: "285",
+                  symbol: whiteSym,
+                  label: "金钱豹国际美食百汇"
+              }
+          ]
+      });
+
+
 
       //商铺标注
       var shopLabelClass = new LabelClass({
@@ -98,7 +834,7 @@
           },
           symbol: new LabelSymbol3D({
               symbolLayers: [new TextSymbol3DLayer({
-                  material: { color: [49,163,84] },
+                  material: { color: "red" },
                   size: 12
               })]
           }),
@@ -107,7 +843,7 @@
 
       var Lyr0 = new FeatureLayer({
         url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
-        renderer: renderer,
+        renderer: renderer0,
         title: "oumeihui all floor",
         outFields: ["*"],
         definitionExpression: defExp0,
@@ -116,12 +852,26 @@
             offset: 0
         }
       });
-      Lyr0.labelsVisible = true;
-      Lyr0.labelingInfo = [ shopLabelClass ];
+      Lyr0.labelsVisible = false;
+      Lyr0.labelingInfo = [ shop3dLabelClass ];
+
+      var LyrPoint0 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorpoint/FeatureServer/0",
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp0,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 0
+          }
+      });
+      LyrPoint0.labelsVisible = true;
+      LyrPoint0.labelingInfo = [ shop3dLabelClass ];
+
 
       var Lyr1 = new FeatureLayer({
           url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
-          renderer: renderer,
+          renderer: renderer1,
           title: "oumeihui all floor",
           outFields: ["*"],
           definitionExpression: defExp1,
@@ -130,12 +880,25 @@
               offset: 10
           }
       });
-      Lyr1.labelsVisible = true;
+      Lyr1.labelsVisible = false;
       Lyr1.labelingInfo = [ shop3dLabelClass ];
+
+      var LyrPoint1 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorpoint/FeatureServer/0",
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp1,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 11
+          }
+      });
+      LyrPoint1.labelsVisible = true;
+      LyrPoint1.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr2 = new FeatureLayer({
           url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
-          renderer: renderer,
+          renderer: renderer2,
           title: "oumeihui all floor",
           outFields: ["*"],
           definitionExpression: defExp2,
@@ -144,12 +907,25 @@
               offset: 20
           }
       });
-      Lyr2.labelsVisible = true;
-      Lyr2.labelingInfo = [ shopLabelClass ];
+      Lyr2.labelsVisible = false;
+      Lyr2.labelingInfo = [ shop3dLabelClass ];
+
+      var LyrPoint2 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorpoint/FeatureServer/0",
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp2,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 21
+          }
+      });
+      LyrPoint2.labelsVisible = true;
+      LyrPoint2.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr3 = new FeatureLayer({
           url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
-          renderer: renderer,
+          renderer: renderer3,
           title: "oumeihui all floor",
           outFields: ["*"],
           definitionExpression: defExp3,
@@ -158,12 +934,25 @@
               offset: 30
           }
       });
-      Lyr3.labelsVisible = true;
-      Lyr3.labelingInfo = [ shopLabelClass ];
+      Lyr3.labelsVisible = false;
+      Lyr3.labelingInfo = [ shop3dLabelClass ];
+
+      var LyrPoint3 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorpoint/FeatureServer/0",
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp3,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 31
+          }
+      });
+      LyrPoint3.labelsVisible = true;
+      LyrPoint3.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr4 = new FeatureLayer({
           url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
-          renderer: renderer,
+          renderer: renderer4,
           title: "oumeihui all floor",
           outFields: ["*"],
           definitionExpression: defExp4,
@@ -172,12 +961,25 @@
               offset: 40
           }
       });
-      Lyr4.labelsVisible = true;
-      Lyr4.labelingInfo = [ shopLabelClass ];
+      Lyr4.labelsVisible = false;
+      Lyr4.labelingInfo = [ shop3dLabelClass ];
+
+      var LyrPoint4 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorpoint/FeatureServer/0",
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp4,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 41
+          }
+      });
+      LyrPoint4.labelsVisible = true;
+      LyrPoint4.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr5 = new FeatureLayer({
           url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
-          renderer: renderer,
+          renderer: renderer5,
           title: "oumeihui all floor",
           outFields: ["*"],
           definitionExpression: defExp5,
@@ -186,12 +988,25 @@
               offset: 50
           }
       });
-      Lyr5.labelsVisible = true;
-      Lyr5.labelingInfo = [ shopLabelClass ];
+      Lyr5.labelsVisible = false;
+      Lyr5.labelingInfo = [ shop3dLabelClass ];
+
+      var LyrPoint5 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorpoint/FeatureServer/0",
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp5,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 51
+          }
+      });
+      LyrPoint5.labelsVisible = true;
+      LyrPoint5.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr6 = new FeatureLayer({
           url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorPolygon/FeatureServer/0",
-          renderer: renderer,
+          renderer: renderer6,
           title: "oumeihui all floor",
           outFields: ["*"],
           definitionExpression: defExp6,
@@ -200,11 +1015,26 @@
               offset: 60
           }
       });
-      Lyr6.labelsVisible = true;
-      Lyr6.labelingInfo = [ shopLabelClass ];
+      Lyr6.labelsVisible = false;
+      Lyr6.labelingInfo = [ shop3dLabelClass ];
+
+      var LyrPoint6 = new FeatureLayer({
+          url: "https://chen.yuli.com/arcgis/rest/services/Hosted/floorpoint/FeatureServer/0",
+          title: "oumeihui all floor",
+          outFields: ["*"],
+          definitionExpression: defExp6,
+          elevationInfo: {
+              mode: "relative-to-ground",
+              offset: 61
+          }
+      });
+      LyrPoint6.labelsVisible = true;
+      LyrPoint6.labelingInfo = [ shop3dLabelClass ];
 
       var map = new Map({
-        layers: [Lyr0,Lyr1,Lyr2,Lyr3,Lyr4,Lyr5,Lyr6]
+        layers: [Lyr0,Lyr1,Lyr2,Lyr3,Lyr4,Lyr5,Lyr6,
+                 LyrPoint0,LyrPoint1,LyrPoint2,LyrPoint3,LyrPoint4,LyrPoint5,LyrPoint6
+                ]
       });
 
       var myServiceURL = "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetColor/MapServer";
@@ -217,8 +1047,8 @@
         map: map,
         camera: {
           position: {
-            latitude: 39.985,
-            longitude: 116.361
+            latitude: 39.984881,
+            longitude: 116.320399
           },
           tilt: 45,
           heading: 10
@@ -229,7 +1059,7 @@
         view: view
       });
 
-      view.ui.add(legend, "bottom-right");
+//      view.ui.add(legend, "bottom-right");
 
     });
   </script>

@@ -34,11 +34,13 @@
       "esri/symbols/LabelSymbol3D",
       "esri/symbols/TextSymbol3DLayer",
       "esri/renderers/UniqueValueRenderer",
+      "esri/symbols/PointSymbol3D",
+      "esri/symbols/ObjectSymbol3DLayer",
       "dojo/domReady!"
     ], function(
       Map, SceneView, FeatureLayer, SimpleRenderer, PolygonSymbol3D,
       ExtrudeSymbol3DLayer, Legend,MapImageLayer,LabelClass,TextSymbol,LabelSymbol3D,
-      TextSymbol3DLayer,UniqueValueRenderer
+      TextSymbol3DLayer,UniqueValueRenderer,PointSymbol3D,ObjectSymbol3DLayer
     ) {
 
       // limit visualization to floor -1 to 5
@@ -111,8 +113,16 @@
           ]
       });
 
-      var renderer2 = new SimpleRenderer({
-          symbol:orangeSym
+      var pointRenderer3d = new SimpleRenderer({
+          symbol: new PointSymbol3D({
+              symbolLayers: [new ObjectSymbol3DLayer({
+                  width: 0.1,    // diameter of the object from east to west in meters
+                  height: 0.1,  // height of object in meters
+                  depth: 0.1,   // diameter of the object from north to south in meters
+                  resource: { primitive: "cube" },
+                  material: { color: "blue" }
+              })]
+          })
       });
 
       //地下一层唯一值渲染
@@ -814,8 +824,6 @@
           ]
       });
 
-
-
       //商铺标注
       var shopLabelClass = new LabelClass({
           labelExpressionInfo: { value: "{name}" },
@@ -824,7 +832,7 @@
               haloSize: 2,
               haloColor: "white"
           }),
-          labelPlacement:"above-right"
+          labelPlacement:"center-center" //above-right
       });
 
       //3d标注
@@ -838,7 +846,7 @@
                   size: 12
               })]
           }),
-          labelPlacement:"above-right"
+          labelPlacement:"center-center" //above-right
       });
 
       var Lyr0 = new FeatureLayer({
@@ -866,6 +874,7 @@
           }
       });
       LyrPoint0.labelsVisible = true;
+      LyrPoint0.renderer = pointRenderer3d;
       LyrPoint0.labelingInfo = [ shop3dLabelClass ];
 
 
@@ -894,6 +903,7 @@
           }
       });
       LyrPoint1.labelsVisible = true;
+      LyrPoint1.renderer = pointRenderer3d;
       LyrPoint1.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr2 = new FeatureLayer({
@@ -921,6 +931,7 @@
           }
       });
       LyrPoint2.labelsVisible = true;
+      LyrPoint2.renderer = pointRenderer3d;
       LyrPoint2.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr3 = new FeatureLayer({
@@ -948,6 +959,7 @@
           }
       });
       LyrPoint3.labelsVisible = true;
+      LyrPoint3.renderer = pointRenderer3d;
       LyrPoint3.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr4 = new FeatureLayer({
@@ -975,6 +987,7 @@
           }
       });
       LyrPoint4.labelsVisible = true;
+      LyrPoint4.renderer = pointRenderer3d;
       LyrPoint4.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr5 = new FeatureLayer({
@@ -1002,6 +1015,7 @@
           }
       });
       LyrPoint5.labelsVisible = true;
+      LyrPoint5.renderer = pointRenderer3d;
       LyrPoint5.labelingInfo = [ shop3dLabelClass ];
 
       var Lyr6 = new FeatureLayer({
@@ -1029,6 +1043,7 @@
           }
       });
       LyrPoint6.labelsVisible = true;
+      LyrPoint6.renderer = pointRenderer3d;
       LyrPoint6.labelingInfo = [ shop3dLabelClass ];
 
       var map = new Map({
@@ -1055,11 +1070,14 @@
         }
       });
 
+      //图例
       var legend = new Legend({
         view: view
       });
+      //view.ui.add(legend, "bottom-right");
 
-//      view.ui.add(legend, "bottom-right");
+      //graphicslayer
+
 
     });
   </script>
